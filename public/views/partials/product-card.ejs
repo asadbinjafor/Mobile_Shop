@@ -1,0 +1,26 @@
+<article class="product-card" data-id="<%= p.id %>" data-name="<%= p.name.toLowerCase() %>" data-brand="<%= p.brand %>">
+  <div class="p-badges">
+    <span class="discount-badge"><%= p.discount %>%</span>
+    <span class="label-badge <%= p.labelClass %>"><%= p.labelText %></span>
+  </div>
+  <button class="wish-btn" data-id="<%= p.id %>" title="Wishlist">♡</button>
+  <a href="/products/<%= p.id %>" class="product-img-wrap<%= p.outOfStock ? ' sold-out' : '' %>">
+    <img src="<%= p.image %>" alt="<%= p.name %>" loading="lazy">
+  </a>
+  <div class="product-body">
+    <div class="product-brand"><%= p.brand %></div>
+    <h3 class="product-name"><a href="/products/<%= p.id %>"><%= p.name %></a></h3>
+    <% if (p.hasEmi) { %><span class="emi-tag">0% EMI Available</span><% } %>
+    <div class="price-row">
+      <span class="price-now"><%= p.formattedPrice %></span>
+      <span class="price-was"><%= p.formattedOldPrice %></span>
+      <% if (p.discount >= 20) { %><span class="save-tag">Save <%= p.discount %>%</span><% } %>
+    </div>
+    <div class="product-btns">
+      <a href="/products/<%= p.id %>" class="btn-view">VIEW</a>
+      <button class="btn-cart add-cart-btn" data-id="<%= p.id %>" <%= p.outOfStock ? 'disabled' : '' %>>
+        <%= p.outOfStock ? 'Out of Stock' : 'Add to Cart' %>
+      </button>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,45 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/header') %>
+
+<section class="section product-detail-page">
+  <div class="container">
+    <div class="product-detail">
+      <div class="detail-img">
+        <img src="<%= product.image %>" alt="<%= product.name %>">
+        <% if (product.outOfStock) { %><span class="stock-badge">Out of Stock</span><% } %>
+      </div>
+      <div class="detail-info">
+        <span class="product-brand"><%= product.brand.toUpperCase() %></span>
+        <h1><%= product.name %></h1>
+        <span class="label-badge <%= product.labelClass %>"><%= product.labelText %></span>
+        <div class="price-row">
+          <span class="price-now"><%= product.formattedPrice %></span>
+          <span class="price-was"><%= product.formattedOldPrice %></span>
+          <span class="save-tag"><%= product.discount %>% OFF</span>
+        </div>
+        <% if (product.hasEmi) { %><span class="emi-tag">0% EMI Available | Free Delivery</span><% } %>
+        <ul class="detail-features">
+          <li>100% Genuine Product</li>
+          <li>Official Brand Warranty</li>
+          <li>Free delivery in Dhaka</li>
+          <li>Cash on delivery available</li>
+        </ul>
+        <div class="detail-actions">
+          <button class="btn-cart add-cart-btn" data-id="<%= product.id %>" <%= product.outOfStock ? 'disabled' : '' %>>
+            <%= product.outOfStock ? 'Out of Stock' : 'Add to Cart' %>
+          </button>
+          <a href="https://wa.me/<%= config.whatsapp %>?text=<%= encodeURIComponent('I want to order: ' + product.name) %>" class="btn-whatsapp-inline" target="_blank">WhatsApp Order</a>
+        </div>
+      </div>
+    </div>
+
+    <% if (related.length) { %>
+      <h2 class="sec-heading" style="margin-top:48px">Related Products</h2>
+      <div class="product-grid">
+        <% related.forEach(p => { %><%- include('../partials/product-card', { p }) %><% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

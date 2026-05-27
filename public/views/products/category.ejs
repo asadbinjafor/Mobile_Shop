@@ -1,0 +1,23 @@
+<%- include('../partials/head', { title: category.name }) %>
+<%- include('../partials/header') %>
+
+<section class="section page-header">
+  <div class="container">
+    <h1 class="sec-heading"><%= category.icon %> <%= category.name %></h1>
+    <p class="page-meta"><%= products.length %> product(s)</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+  <% if (products.length === 0) { %>
+    <p class="empty-msg">No products in this category yet. <a href="/">Browse all</a></p>
+  <% } else { %>
+    <div class="product-grid">
+      <% products.forEach(p => { %><%- include('../partials/product-card', { p }) %><% }) %>
+    </div>
+  <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

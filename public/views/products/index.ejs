@@ -1,0 +1,25 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/header') %>
+
+<section class="section page-header">
+  <div class="container">
+    <h1 class="sec-heading"><%= title %></h1>
+    <% if (query || brand) { %>
+      <p class="page-meta"><%= products.length %> product(s) found</p>
+    <% } %>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+  <% if (products.length === 0) { %>
+    <p class="empty-msg">No products found. <a href="/">Go home</a></p>
+  <% } else { %>
+    <div class="product-grid">
+      <% products.forEach(p => { %><%- include('../partials/product-card', { p }) %><% }) %>
+    </div>
+  <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

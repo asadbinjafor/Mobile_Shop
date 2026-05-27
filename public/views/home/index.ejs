@@ -1,0 +1,162 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/header') %>
+
+<section class="hero-section">
+  <div class="container hero-layout">
+    <div class="hero-main">
+      <div class="hero-slider" id="heroSlider">
+        <div class="hero-slide active">
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=900&q=80" alt="Smartphones">
+          <div class="hero-overlay">
+            <span class="tag">Flash Sale</span>
+            <h2>Latest Smartphones<br>Up to 40% OFF</h2>
+            <a href="#flash-sale" class="btn-shop">Shop Now →</a>
+          </div>
+        </div>
+        <div class="hero-slide">
+          <img src="https://images.unsplash.com/photo-1611186871348-b1ce18000c9f?w=900&q=80" alt="iPhone">
+          <div class="hero-overlay">
+            <span class="tag">Apple</span>
+            <h2>iPhone 17 Series<br>Official Warranty</h2>
+            <a href="/category/phones" class="btn-shop">Explore →</a>
+          </div>
+        </div>
+        <div class="hero-slide">
+          <img src="https://images.unsplash.com/photo-1580910051074-3eb694886505?w=900&q=80" alt="Gadgets">
+          <div class="hero-overlay">
+            <span class="tag">Gadgets</span>
+            <h2>Earbuds & Watches<br>Best Deals</h2>
+            <a href="/category/gadgets" class="btn-shop">Shop Gadgets →</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-nav">
+        <button class="hero-arrow prev" id="heroPrev">‹</button>
+        <div class="hero-dots" id="heroDots"></div>
+        <button class="hero-arrow next" id="heroNext">›</button>
+      </div>
+    </div>
+    <div class="hero-side">
+      <a href="#flash-sale" class="side-banner banner-1"><span>0% EMI</span><strong>36 Months<br>Installment</strong></a>
+      <a href="#" class="side-banner banner-2"><span>Free Delivery</span><strong>Order Today<br>Get Tomorrow</strong></a>
+    </div>
+  </div>
+</section>
+
+<section class="features-bar">
+  <div class="container features-grid">
+    <div class="feature-box"><div class="f-icon fi-green">✓</div><div><strong>100% Genuine Products</strong></div></div>
+    <div class="feature-box"><div class="f-icon fi-blue">🚀</div><div><strong>Super fast Delivery</strong></div></div>
+    <div class="feature-box"><div class="f-icon fi-orange">💳</div><div><strong>36 Months Installments</strong></div></div>
+    <div class="feature-box"><div class="f-icon fi-purple">🔄</div><div><strong>2 Years Replacement</strong></div></div>
+    <div class="feature-box"><div class="f-icon fi-red">💰</div><div><strong>Best Price in BD</strong></div></div>
+  </div>
+</section>
+
+<section class="section categories-section">
+  <div class="container">
+    <h2 class="sec-heading">Shop by Categories</h2>
+    <div class="cat-grid">
+      <% categories.forEach(cat => { %>
+        <a href="/category/<%= cat.slug %>" class="cat-item">
+          <div class="cat-img"><%= cat.icon %></div><span><%= cat.name %></span>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="promo-row">
+  <div class="container promo-grid">
+    <a href="#flash-sale" class="promo-card pc-1"><span class="pc-tag">Flash Sale</span><h3>Mega Mobile Fest</h3><p>Up to 40% OFF</p></a>
+    <a href="/category/phones" class="promo-card pc-2"><span class="pc-tag">New</span><h3>iPhone & Samsung</h3><p>Official Warranty</p></a>
+    <a href="/category/gadgets" class="promo-card pc-3"><span class="pc-tag">Gadget</span><h3>Earbuds & Watch</h3><p>From ৳999</p></a>
+  </div>
+</section>
+
+<section class="flash-section" id="flash-sale">
+  <div class="container">
+    <div class="flash-banner">
+      <div class="flash-title-wrap">
+        <span class="fire">🔥</span>
+        <h2>Flash Sale ~ Mega EID Fest | 0% EMI | Upto 25,000৳ Cashback | Free Delivery</h2>
+      </div>
+      <div class="flash-timer">
+        <span class="timer-label">Ends in:</span>
+        <div class="timer-boxes">
+          <div><b id="hours">00</b><small>Hrs</small></div><span>:</span>
+          <div><b id="minutes">00</b><small>Min</small></div><span>:</span>
+          <div><b id="seconds">00</b><small>Sec</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-wrap">
+      <button class="carousel-btn prev" data-target="flashCarousel">‹</button>
+      <div class="product-carousel" id="flashCarousel">
+        <% flashProducts.forEach(p => { %>
+          <%- include('../partials/product-card', { p }) %>
+        <% }) %>
+      </div>
+      <button class="carousel-btn next" data-target="flashCarousel">›</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="offers">
+  <div class="container">
+    <div class="sec-header">
+      <h2 class="sec-heading">Best Deal Products</h2>
+      <a href="/products" class="view-all">View All →</a>
+    </div>
+    <div class="product-grid">
+      <% dealProducts.forEach(p => { %><%- include('../partials/product-card', { p }) %><% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-gray" id="phones">
+  <div class="container">
+    <div class="sec-header">
+      <h2 class="sec-heading">Recently Added</h2>
+      <a href="/products" class="view-all">View All →</a>
+    </div>
+    <div class="product-grid">
+      <% recentProducts.forEach(p => { %><%- include('../partials/product-card', { p }) %><% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="trending">
+  <div class="container">
+    <div class="sec-header">
+      <h2 class="sec-heading">Trending Products</h2>
+      <a href="/products" class="view-all">View All →</a>
+    </div>
+    <div class="product-grid">
+      <% trendingProducts.forEach(p => { %><%- include('../partials/product-card', { p }) %><% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="brand-section">
+  <div class="container">
+    <h2 class="sec-heading center">Shop by Brand</h2>
+    <div class="brand-logos">
+      <% brands.forEach(b => { %>
+        <a href="/products?brand=<%= b.slug %>" class="brand-logo" data-brand="<%= b.slug %>"><%= b.name %></a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter">
+  <div class="container newsletter-inner">
+    <div><h3>Subscribe for Exclusive Offers</h3><p>Get flash sale alerts & new arrivals</p></div>
+    <form class="newsletter-form" id="newsletterForm">
+      <input type="email" placeholder="Enter your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
