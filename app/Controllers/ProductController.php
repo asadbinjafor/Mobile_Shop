@@ -10,11 +10,19 @@ class ProductController extends Controller
     public function index(): void
     {
         $q = trim($_GET['q'] ?? '');
-        $brand = trim($_GET['brand'] ?? '');
-        $category = trim($_GET['category'] ?? '');
+        $brand = strtolower(trim($_GET['brand'] ?? ''));
+        $category = strtolower(trim($_GET['category'] ?? ''));
         $minPrice = (int) ($_GET['min_price'] ?? 0);
         $maxPrice = (int) ($_GET['max_price'] ?? 0);
         $sort = $_GET['sort'] ?? 'newest';
+
+        if ($brand !== '' && !ProductModel::isValidBrandSlug($brand)) {
+            $brand = '';
+        }
+        $activeCategories = array_column(ProductModel::getCategories(), 'slug');
+        if ($category !== '' && !in_array($category, $activeCategories, true)) {
+            $category = '';
+        }
 
         $list = $q !== '' ? ProductModel::search($q) : ProductModel::getAll();
 

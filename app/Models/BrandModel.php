@@ -26,6 +26,23 @@ class BrandModel
         return $stmt->fetch() ?: null;
     }
 
+    public static function findPublicBySlug(string $slug): ?array
+    {
+        try {
+            $stmt = Database::connection()->prepare(
+                'SELECT slug, name FROM brands WHERE slug = ? AND is_active = 1'
+            );
+            $stmt->execute([$slug]);
+            $row = $stmt->fetch();
+            if ($row) {
+                return ['slug' => $row['slug'], 'name' => $row['name']];
+            }
+        } catch (\Throwable) {
+            // fall through
+        }
+        return null;
+    }
+
     public static function create(array $data): int
     {
         $stmt = Database::connection()->prepare(

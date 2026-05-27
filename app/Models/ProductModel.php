@@ -102,6 +102,118 @@ class ProductModel
         return self::allProducts();
     }
 
+    public static function filter(array $filters = []): array
+    {
+        $q = trim($filters['q'] ?? '');
+        $brand = strtolower(trim($filters['brand'] ?? ''));
+        $category = strtolower(trim($filters['category'] ?? ''));
+
+        try {
+            $sql = 'SELECT * FROM products WHERE 1=1';
+            $params = [];
+
+            if ($q !== '') {
+                $sql .= ' AND (name LIKE ? OR brand LIKE ? OR category LIKE ?)';
+                $like = '%' . $q . '%';
+                array_push($params, $like, $like, $like);
+            }
+            if ($brand !== '') {
+                $sql .= ' AND brand = ?';
+                $params[] = $brand;
+            }
+            if ($category !== '') {
+                $sql .= ' AND category = ?';
+                $params[] = $category;
+            }
+
+            $sql .= ' ORDER BY id DESC';
+            $stmt = Database::connection()->prepare($sql);
+            $stmt->execute($params);
+            return array_map([self::class, 'normalize'], $stmt->fetchAll());
+        } catch (\Throwable) {
+            $list = self::allProducts();
+            if ($q !== '') {
+                $list = self::search($q);
+            }
+            if ($brand !== '') {
+                $list = array_values(array_filter($list, fn($p) => $p['brand'] === $brand));
+            }
+            if ($category !== '') {
+                $list = array_values(array_filter($list, fn($p) => ($p['category'] ?? 'phones') === $category));
+            }
+            usort($list, fn($a, $b) => $b['id'] <=> $a['id']);
+            return $list;
+        }
+    }
+
+    public static function categoryNameMap(): array
+    {
+        $map = [];
+        foreach (self::getCategories() as $c) {
+            $map[$c['slug']] = $c['name'];
+        }
+        try {
+            foreach (Database::connection()->query('SELECT slug, name FROM categories')->fetchAll() as $r) {
+                $map[$r['slug']] = $r['name'];
+            }
+        } catch (\Throwable) {
+            // ignore
+        }
+        return $map;
+    }
+
+    public static function brandNameMap(): array
+    {
+        $map = [];
+        foreach (self::getBrands() as $b) {
+            $map[$b['slug']] = $b['name'];
+        }
+        try {
+            foreach (Database::connection()->query('SELECT slug, name FROM brands')->fetchAll() as $r) {
+                $map[$r['slug']] = $r['name'];
+            }
+        } catch (\Throwable) {
+            // ignore
+        }
+        return $map;
+    }
+
+    public static function isValidBrandSlug(string $slug): bool
+    {
+        $slug = strtolower(trim($slug));
+        if ($slug === '') {
+            return false;
+        }
+        try {
+            return BrandModel::findBySlug($slug) !== null;
+        } catch (\Throwable) {
+            foreach (self::getBrands() as $b) {
+                if ($b['slug'] === $slug) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public static function isValidCategorySlug(string $slug): bool
+    {
+        $slug = strtolower(trim($slug));
+        if ($slug === '') {
+            return false;
+        }
+        try {
+            return CategoryModel::findBySlug($slug) !== null;
+        } catch (\Throwable) {
+            foreach (self::getCategories() as $c) {
+                if ($c['slug'] === $slug) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     public static function getById(int|string $id): ?array
     {
         $id = (int) $id;
@@ -204,6 +316,11 @@ class ProductModel
 
     public static function findCategory(string $slug): ?array
     {
+        $slug = strtolower(trim($slug));
+        $fromDb = CategoryModel::findPublicBySlug($slug);
+        if ($fromDb) {
+            return $fromDb;
+        }
         foreach (self::getCategories() as $cat) {
             if ($cat['slug'] === $slug) {
                 return $cat;
